@@ -134,7 +134,20 @@ def read_status_has_discrepancies(entry_status):
 
 
 def read_counts_have_discrepancies(entry_read_counts):
-    pass
+    """
+    Returns True if the read counts do not match. Otherwise, returns False.
+    :param entry_read_counts:
+    :return:
+    """
+    # Read counts match - no discrepancy
+    if entry_read_counts[0] == entry_read_counts[1]:
+        return False
+    # One read count is 0 and the other is None - identical meanings, and no discrepancy
+    elif not entry_read_counts[0] and not entry_read_counts[1]:
+        return False
+    # At least one read count exists, but they aren't the same. There is a discrepancy.
+    else:
+        return True
 
 
 def owned_counts_have_discrepancies(entry_owned_counts):

@@ -1,4 +1,5 @@
 import json
+import re
 
 
 def load_entries():
@@ -60,12 +61,21 @@ def formats_have_discrepancies(entry_formats):
     """
 
     if entry_formats[0] and entry_formats[1]:
+        # Both items exist and one contains the other
         if entry_formats[0].lower() in entry_formats[1].lower():
             return False
         elif entry_formats[1].lower() in entry_formats[0].lower():
             return False
+        # Both items exist, but aren't the same
         else:
             return True
+
+    # Only one item exists - there is a discrepancy
+    elif entry_formats[0] or entry_formats[1]:
+        return True
+    # Neither item exists
+    else:
+        return False
 
 
 def read_dates_have_discrepancies(entry_read_dates):
@@ -83,7 +93,27 @@ def read_dates_have_discrepancies(entry_read_dates):
 
 
 def tags_have_discrepancies(entry_tags):
-    pass
+    """
+    Returns True if the tags do not match. Otherwise, returns False.
+    :param entry_tags: A list of two items. They must be str or None.
+    :return:
+    """
+    if entry_tags[0] and entry_tags[1]:
+        first_tags = re.findall(r'\w+', entry_tags[0])
+        second_tags = re.findall(r'\w+', entry_tags[1])
+        # Both sets exist and match - there is no discrepancy
+        if set(first_tags) == set(second_tags):
+            return False
+        # Both sets exist, but do not match - there is a discrepancy
+        else:
+            return True
+
+    # Only one item exists - there is a discrepancy
+    elif entry_tags[0] or entry_tags[1]:
+        return True
+    # Neither item exists
+    else:
+        return False
 
 
 def read_status_has_discrepancies(entry_status):

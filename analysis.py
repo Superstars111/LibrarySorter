@@ -117,7 +117,20 @@ def tags_have_discrepancies(entry_tags):
 
 
 def read_status_has_discrepancies(entry_status):
-    pass
+    """
+    Returns True if the statuses do not match. Otherwise, returns False.
+    :param entry_status: A list of two items. They must be str or None.
+    :return:
+    """
+    # Items match - No discrepancy
+    if entry_status[0] == entry_status[1]:
+        return False
+    # Items do not match, but mean the same thing. No discrepancy.
+    elif {entry_status[0], entry_status[1]} <= {"dropped", "did-not-finish"}:
+        return False
+    # Items are not the same. There is a discrepancy.
+    else:
+        return True
 
 
 def read_counts_have_discrepancies(entry_read_counts):

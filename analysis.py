@@ -53,7 +53,19 @@ def ratings_have_discrepancies(entry_ratings: list) -> bool:
 
 
 def formats_have_discrepancies(entry_formats):
-    pass
+    """
+    Returns True if the formats do not match. Otherwise, returns False.
+    :param entry_formats: A list of two items. They must be str or None.
+    :return:
+    """
+
+    if entry_formats[0] and entry_formats[1]:
+        if entry_formats[0].lower() in entry_formats[1].lower():
+            return False
+        elif entry_formats[1].lower() in entry_formats[0].lower():
+            return False
+        else:
+            return True
 
 
 def read_dates_have_discrepancies(entry_read_dates):

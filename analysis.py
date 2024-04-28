@@ -10,6 +10,7 @@ def load_entries():
 def find_discrepancies(entries):
     entries_with_discrepancies = []
 
+    # FIXME: Only put the key in, not the whole dict
     for entry in entries:
         if ratings_have_discrepancies(entry):
             entries_with_discrepancies.append(entry)
@@ -151,11 +152,26 @@ def read_counts_have_discrepancies(entry_read_counts):
 
 
 def owned_counts_have_discrepancies(entry_owned_counts):
-    pass
+    """
+    Returns True if the read counts do not match. Otherwise, returns False.
+    :param entry_owned_counts: A list of two items. The first is int or None. The second is str or None.
+    :return:
+    """
+    if bool(entry_owned_counts[0]) != yn_bool(entry_owned_counts[1]):
+        return True
+    else:
+        return False
 
 
 def truthiness_matches(item_a, item_b):
     if bool(item_a) == bool(item_b):
+        return True
+    else:
+        return False
+
+
+def yn_bool(yn: str) -> bool:
+    if yn == "Yes":
         return True
     else:
         return False

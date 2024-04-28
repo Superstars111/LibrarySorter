@@ -69,7 +69,17 @@ def formats_have_discrepancies(entry_formats):
 
 
 def read_dates_have_discrepancies(entry_read_dates):
-    pass
+    """
+    Returns True if the read dates do not match. Otherwise, returns False.
+    Dates from both Goodreads and Storygraph are logged in YYYY/MM/DD format.
+    :param entry_read_dates: A list of two items. They must be str or None.
+    :return:
+    """
+
+    if entry_read_dates[0] == entry_read_dates[1]:
+        return False
+    else:
+        return True
 
 
 def tags_have_discrepancies(entry_tags):

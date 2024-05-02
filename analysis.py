@@ -7,24 +7,23 @@ def load_entries():
         return json.load(incoming)
 
 
-def find_discrepancies(entries):
+def find_discrepancies(entries: list[dict]):
     entries_with_discrepancies = []
 
-    # FIXME: Only put the key in, not the whole dict
     for entry in entries:
-        if ratings_have_discrepancies(entry):
+        if ratings_have_discrepancies(entry["user_rating"]):
             entries_with_discrepancies.append(entry)
-        elif formats_have_discrepancies(entry):
+        elif formats_have_discrepancies(entry["format"]):
             entries_with_discrepancies.append(entry)
-        elif read_dates_have_discrepancies(entry):
+        elif read_dates_have_discrepancies(entry["date_read"]):
             entries_with_discrepancies.append(entry)
-        elif tags_have_discrepancies(entry):
+        elif tags_have_discrepancies(entry["tags"]):
             entries_with_discrepancies.append(entry)
-        elif read_status_has_discrepancies(entry):
+        elif read_status_has_discrepancies(entry["status"]):
             entries_with_discrepancies.append(entry)
-        elif read_counts_have_discrepancies(entry):
+        elif read_counts_have_discrepancies(entry["read_count"]):
             entries_with_discrepancies.append(entry)
-        elif owned_counts_have_discrepancies(entry):
+        elif owned_counts_have_discrepancies(entry["owned_count"]):
             entries_with_discrepancies.append(entry)
 
     return entries_with_discrepancies

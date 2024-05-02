@@ -1,5 +1,6 @@
 from collection import collect_entries, dump_entries
-from analysis import load_entries, find_entry, find_discrepancies
+from analysis import load_entries, find_entry, discrepancy_list
+from pprint import pprint
 
 
 def determine_user_action():
@@ -24,8 +25,13 @@ def determine_user_action():
 
         elif action == "analyze":
             entries = load_entries()
-            find_discrepancies(entries[0])
-            # find_entry(entries)
+            print(f"Base entry list has {len(entries[0])} entries")
+            mismatched_entries = discrepancy_list(entries[0])
+            print(f"Mismatched entry list has {len(mismatched_entries)} entries")
+
+            for entry in mismatched_entries:
+                pprint(entry, sort_dicts=False)
+                input("Press enter to continue...")
 
         else:
             print(f"Invalid: {action}, {type(action)}")

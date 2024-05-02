@@ -7,26 +7,26 @@ def load_entries():
         return json.load(incoming)
 
 
-def find_discrepancies(entries: list[dict]):
-    entries_with_discrepancies = []
+def discrepancy_list(entries: list[dict]):
+    broken_entries = []
 
     for entry in entries:
         if ratings_have_discrepancies(entry["user_rating"]):
-            entries_with_discrepancies.append(entry)
+            broken_entries.append(entry)
         elif formats_have_discrepancies(entry["format"]):
-            entries_with_discrepancies.append(entry)
+            broken_entries.append(entry)
         elif read_dates_have_discrepancies(entry["date_read"]):
-            entries_with_discrepancies.append(entry)
+            broken_entries.append(entry)
         elif tags_have_discrepancies(entry["tags"]):
-            entries_with_discrepancies.append(entry)
+            broken_entries.append(entry)
         elif read_status_has_discrepancies(entry["status"]):
-            entries_with_discrepancies.append(entry)
+            broken_entries.append(entry)
         elif read_counts_have_discrepancies(entry["read_count"]):
-            entries_with_discrepancies.append(entry)
+            broken_entries.append(entry)
         elif owned_counts_have_discrepancies(entry["owned_count"]):
-            entries_with_discrepancies.append(entry)
+            broken_entries.append(entry)
 
-    return entries_with_discrepancies
+    return broken_entries
 
 
 def ratings_have_discrepancies(entry_ratings: list) -> bool:
@@ -98,22 +98,13 @@ def tags_have_discrepancies(entry_tags):
     :param entry_tags: A list of two items. They must be str or None.
     :return:
     """
-    if entry_tags[0] and entry_tags[1]:
-        first_tags = re.findall(r'\w+', entry_tags[0])
-        second_tags = re.findall(r'\w+', entry_tags[1])
-        # Both sets exist and match - there is no discrepancy
-        if set(first_tags) == set(second_tags):
-            return False
-        # Both sets exist, but do not match - there is a discrepancy
-        else:
-            return True
+    first_tags = filtered_tag_set(entry_tags[0])
+    second_tags = filtered_tag_set(entry_tags[1])
 
-    # Only one item exists - there is a discrepancy
-    elif entry_tags[0] or entry_tags[1]:
-        return True
-    # Neither item exists
-    else:
+    if first_tags == second_tags:
         return False
+    else:
+        return True
 
 
 def read_status_has_discrepancies(entry_status):
@@ -174,6 +165,21 @@ def yn_bool(yn: str) -> bool:
         return True
     else:
         return False
+
+
+def filtered_tag_set(str_tags: str) -> set:
+    """
+    Takes a comma-separated string of tags and returns a set of all tags except 'to-read'.
+    If no tags are present, returns empty set.
+    :param str_tags:
+    :return:
+    """
+    list_tags = []
+    if str_tags:
+        list_tags = re.findall(r'\w+\-?\w+', str_tags)
+        if "to-read" in list_tags:
+            list_tags.remove("to-read")
+    return set(list_tags)
 
 
 def find_entry(entries: dict):

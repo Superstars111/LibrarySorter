@@ -3,6 +3,12 @@ from analysis import load_entries, find_entry, discrepancy_list
 from pprint import pprint
 
 
+def list_items(listed_entries):
+    for entry in listed_entries:
+        pprint(entry, sort_dicts=False)
+        input("Press enter to continue...")
+
+
 def determine_user_action():
     action = None
     scope = None
@@ -22,16 +28,26 @@ def determine_user_action():
                     dump_entries(entries, broken_entries)
                 else:
                     print("Invalid")
+                    scope = None
 
         elif action == "analyze":
             entries = load_entries()
-            print(f"Base entry list has {len(entries[0])} entries")
+            print(f"There are {len(entries[0])} entries with matches")
+            print(f"There are {len(entries[1])} entries with no match")
             mismatched_entries = discrepancy_list(entries[0])
-            print(f"Mismatched entry list has {len(mismatched_entries)} entries")
+            print(f"There are {len(mismatched_entries)} matched entries with discrepancies")
 
-            for entry in mismatched_entries:
-                pprint(entry, sort_dicts=False)
-                input("Press enter to continue...")
+            while not scope:
+                scope = input("Which list would you like to view? Mismatched, or single?: ").lower()
+                if scope == "mismatched":
+                    list_items(mismatched_entries)
+
+                elif scope == "single":
+                    list_items(entries[1])
+
+                else:
+                    print("Invalid")
+                    scope = None
 
         else:
             print(f"Invalid: {action}, {type(action)}")

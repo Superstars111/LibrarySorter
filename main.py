@@ -4,9 +4,11 @@ from pprint import pprint
 
 
 def list_items(listed_entries):
-    for entry in listed_entries:
+    for idx, entry in enumerate(listed_entries):
+        print(f"You are on entry {idx+1} of {len(listed_entries)}")
         pprint(entry, sort_dicts=False)
         input("Press enter to continue...")
+        continue
 
 
 def determine_user_action():
